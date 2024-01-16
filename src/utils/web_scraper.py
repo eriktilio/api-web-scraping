@@ -1,14 +1,16 @@
-import json
+import re
 
 import requests
 from bs4 import BeautifulSoup
 
+from constants import BASE_URL
 
-class GasolinaComumScraper:
+
+class WebScraper:
     def __init__(self, url):
-        self.url = url
+        self.url = BASE_URL + url
 
-    def scrape_data(self):
+    def __scrape_data(self):
         page = requests.get(self.url)
         soup = BeautifulSoup(page.content, "html.parser")
         cards = soup.find_all("div", class_="card small p hoverable")
@@ -16,7 +18,7 @@ class GasolinaComumScraper:
         result = []
         for card in cards:
             title = card.find("span").text.strip()
-            price = card.find("p").text.strip()
+            price = re.sub(r"R\$ ", "", card.find("p").text.strip())
             local = card.find("p", class_="truncate tooltipped padding10").text.strip()
             updated = card.find("p", class_="tb-valor-10").text.strip()
             address = card.find(
@@ -24,23 +26,17 @@ class GasolinaComumScraper:
             ).text.strip()
 
             data = {
-                "Titulo": title,
-                "Preço": price,
-                "Local": local,
-                "Atualizado": updated,
-                "Endereço": address,
+                "title": title,
+                "price": price,
+                "local": local,
+                "updated": updated,
+                "address": address,
             }
-            result.append(data)
+            if local and price and title:
+                result.append(data)
 
         return result
 
-    def data_to_json(self):
-        data = self.scrape_data()
-        return json.dumps(data, ensure_ascii=False, indent=2)
-
-
-# Exemplo de uso
-URL = "https://buscapreco.sefaz.am.gov.br/item/grupo/page/1?termoCdGtin=&descricaoProd=gasolina+comum&action="
-scraper = GasolinaComumScraper(URL)
-json_result = scraper.data_to_json()
-print(json_result)
+    def get_data(self):
+        data = self.__scrape_data()
+        return data

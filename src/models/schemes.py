@@ -1,13 +1,22 @@
+from typing import List
+
 from pydantic import BaseModel
 
 
 class ScrapeRequest(BaseModel):
-    url: str
+    item: str
 
 
 class ScrapeResponse(BaseModel):
     title: str
-    content: str
+    price: str
+    local: str
+    updated: str
+    address: str
+
+
+class ScrapeResponseList(BaseModel):
+    data: List[ScrapeResponse]
 
 
 class ErrorResponse(BaseModel):
