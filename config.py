@@ -10,3 +10,4 @@ class Config(object):
     API_NAME = os.environ.get("API_NAME")
     API_VERSION = os.environ.get("API_VERSION")
     API_DESC = os.environ.get("API_DESC")
+    PORT = os.environ.get("PORT")
