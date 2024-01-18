@@ -1,21 +1,24 @@
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel
 
 
 class ScrapeRequest(BaseModel):
     item: str
+    page: Optional[int] = 1
 
 
 class ScrapeResponse(BaseModel):
     title: str
     price: str
     local: str
-    updated: str
+    url_image: Optional[str] = None
+    last_update: str
     address: str
 
 
 class ScrapeResponseList(BaseModel):
+    page: int
     data: List[ScrapeResponse]
 
 

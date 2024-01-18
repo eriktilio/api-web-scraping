@@ -10,7 +10,8 @@ router = APIRouter(tags=["Scrape Methods"])
 async def post_scrape(request_data: schemas.ScrapeRequest):
     try:
         item = request_data.item
-        result = scrape_controller.get_scrape(item)
+        page = request_data.page
+        result = scrape_controller.get_scrape(item, page)
         return result
 
     except HTTPException as e:

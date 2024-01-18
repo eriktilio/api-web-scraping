@@ -20,7 +20,7 @@ class WebScraper:
             title = card.find("span").text.strip()
             price = re.sub(r"R\$ ", "", card.find("p").text.strip())
             local = card.find("p", class_="truncate tooltipped padding10").text.strip()
-            updated = card.find("p", class_="tb-valor-10").text.strip()
+            last_update = card.find("p", class_="tb-valor-10").text.strip()
             address = card.find(
                 "span", class_="truncate grey-text text-darken-4 tb-valor-10 tooltipped"
             ).text.strip()
@@ -29,7 +29,7 @@ class WebScraper:
                 "title": title,
                 "price": price,
                 "local": local,
-                "updated": updated,
+                "last_update": last_update,
                 "address": address,
             }
             if local and price and title:

@@ -18,7 +18,7 @@ class GasolinaComumScraper:
             title = card.find("span").text.strip()
             price = card.find("p").text.strip()
             local = card.find("p", class_="truncate tooltipped padding10").text.strip()
-            updated = card.find("p", class_="tb-valor-10").text.strip()
+            last_update = card.find("p", class_="tb-valor-10").text.strip()
             address = card.find(
                 "span", class_="truncate grey-text text-darken-4 tb-valor-10 tooltipped"
             ).text.strip()
@@ -27,7 +27,7 @@ class GasolinaComumScraper:
                 "Titulo": title,
                 "Preço": price,
                 "Local": local,
-                "Atualizado": updated,
+                "Atualizado": last_update,
                 "Endereço": address,
             }
             result.append(data)
