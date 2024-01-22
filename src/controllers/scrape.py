@@ -4,8 +4,8 @@ import requests
 from fastapi import Depends, HTTPException
 
 from src.models import schemes as schemas
-
-# from src.utils.search_image import SearchImageGoogle
+from src.utils.bing_image_scraper import BingImageScraper
+from src.utils.similar_string import similar
 from src.utils.web_scraper import WebScraper
 
 
@@ -16,12 +16,24 @@ def get_scrape(item: str, page: int):
         scraper_url = f"{page}?termoCdGtin=&descricaoProd={param}&latitude=-3.041560057837038&longitude=-59.9972124545962&consultaExata=true&_consultaExata=on&tipoConsulta=0&distancia=99999&municipio=Manaus&action="
         scraper = WebScraper(scraper_url)
 
-        # seeker_image = SearchImageGoogle()
+        bing_scraper = BingImageScraper()
+
         data = scraper.get_data()
         pagination = scraper.get_pagination()
 
-        # for result in data:
-        #     result["url_image"] = seeker_image.get_url_image(result["title"])
+        for result in data:
+            matching_results = [
+                r
+                for r in data
+                if similar(r["title"], result["title"]) >= 0.6
+                and r["url_image"] is not None
+            ]
+            url_image = bing_scraper.get_url_image(result["title"])
+
+            if not url_image:
+                result["url_image"] = matching_results[0]["url_image"]
+            else:
+                result["url_image"] = url_image
 
         return schemas.ScrapeResponseList(
             current_page=page,

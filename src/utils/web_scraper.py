@@ -29,6 +29,7 @@ class WebScraper:
                 "title": title,
                 "price": price,
                 "local": local,
+                "url_image": None,
                 "last_update": last_update,
                 "address": address,
             }
