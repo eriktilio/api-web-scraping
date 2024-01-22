@@ -18,7 +18,8 @@ class ScrapeResponse(BaseModel):
 
 
 class ScrapeResponseList(BaseModel):
-    page: int
+    current_page: int
+    total_pages: int
     data: List[ScrapeResponse]
 
 
